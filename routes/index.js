@@ -1,9 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const sendResponse = require('../utils/sendResponse')
+
+const user = require('./user')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  return sendResponse(res, true, 200, {}, 'API running successfuly')
 });
+
+router.use('/user', user)
 
 module.exports = router;
