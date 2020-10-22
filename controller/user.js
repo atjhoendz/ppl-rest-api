@@ -2,27 +2,22 @@ const DB = require('../utils/dbConnection')
 const sendResponse = require('../utils/sendResponse')
 
 exports.getAll = (req, res) => {
-  DB.query('SELECT * FROM users', (err, rows, fields) => {
-    if (err) {
-      return sendResponse(res, false, 404, [], err)
-    } else {
-      return sendResponse(res, true, 200, rows, 'Mendapatkan semua data user berhasil')
-    }
+  DB.query('SELECT * FROM users', (err, rows) => {
+    if (err)
+      return sendResponse(res, false, 500, [], err)
+    return sendResponse(res, true, 200, rows, 'Mendapatkan semua data user berhasil')
   })
 }
 
 exports.get = (req, res) => {
   let id_user = req.params.id
 
-  DB.query('SELECT * FROM users WHERE id = ?', [ id_user ], (err, rows, fields) => {
-    if (err){
-      return sendResponse(res, false, 404, [], err)
-    } else {
-      if (rows.length > 0)
+  DB.query('SELECT * FROM users WHERE id = ?', [ id_user ], (err, rows) => {
+    if (err)
+      return sendResponse(res, false, 500, [], err)
+    if (rows.length > 0)
       return sendResponse(res, true, 200, rows, 'Mendapatkan data user berhasil.')
-      else 
-        return sendResponse(res, true, 200, rows, 'Data user tidak ditemukan')
-    }
+    return sendResponse(res, true, 404, rows, 'Data user tidak ditemukan')
   })
 }
 
@@ -32,11 +27,10 @@ exports.create = (req, res) => {
   let institusi = req.body.institusi
   let alamat = req.body.alamat
 
-  DB.query('INSERT INTO users (nama_lengkap, npm, institusi, alamat) VALUES (?, ?, ?, ?)', [nama_lengkap, npm, institusi, alamat], (err, rows, fields) => {
+  DB.query('INSERT INTO users (nama_lengkap, npm, institusi, alamat) VALUES (?, ?, ?, ?)', [nama_lengkap, npm, institusi, alamat], (err, rows) => {
     if (err)
-      return sendResponse(res, false, 500, [], err)
-    else 
-      return sendResponse(res, true, 201, rows, 'Menambahkan user berhasil')
+      return sendResponse(res, false, 500, [], err.sqlMessage)
+    return sendResponse(res, true, 201, rows, 'Menambahkan user berhasil')
   })
 }
 
@@ -48,29 +42,23 @@ exports.update = (req, res) => {
   let institusi = req.body.institusi
   let alamat = req.body.alamat
 
-  DB.query('UPDATE users SET nama_lengkap = ?, npm = ?, institusi = ?, alamat = ? WHERE id = ?', [nama_lengkap, npm, institusi, alamat, id_user], (err, rows, fields) => {
+  DB.query('UPDATE users SET nama_lengkap = ?, npm = ?, institusi = ?, alamat = ? WHERE id = ?', [nama_lengkap, npm, institusi, alamat, id_user], (err, rows) => {
     if(err)
-      return sendResponse(res, false, 500, [], err)
-    else {
-      if (rows.affectedRows > 0) 
-        return sendResponse(res, true, 200, rows, 'Data user berhasil diperbarui')
-      else 
-        return sendResponse(res, true, 404, [], 'Data user tidak ditemukan')
-    }
+      return sendResponse(res, false, 500, [], err.sqlMessage)
+    if (rows.affectedRows > 0) 
+      return sendResponse(res, true, 200, rows, 'Data user berhasil diperbarui')
+    return sendResponse(res, true, 404, [], 'Data user tidak ditemukan')
   })
 }
 
 exports.delete = (req, res) => {
   let id_user = req.params.id
 
-  DB.query('DELETE FROM users WHERE id = ?', [id_user], (err, rows, fields) => {
+  DB.query('DELETE FROM users WHERE id = ?', [id_user], (err, rows) => {
     if (err)
-      return sendResponse(res, false, 500, [], err)
-    else {
-      if (rows.affectedRows > 0) 
-        return sendResponse(res, true, 200, rows, 'User berhasil dihapus')
-      else
-        return sendResponse(res, true, 404, [], 'Data user tidak ditemukan')
-    }
+      return sendResponse(res, false, 500, [], err.sqlMessage)
+    if (rows.affectedRows > 0) 
+      return sendResponse(res, true, 200, rows, 'User berhasil dihapus')
+    return sendResponse(res, true, 404, [], 'Data user tidak ditemukan')
   })
 }
