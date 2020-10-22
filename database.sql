@@ -56,10 +56,10 @@ CREATE TABLE `peminjaman` (
   `tanggal_pinjam` varchar(100) NOT NULL,
   `tanggal_kembali` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `kepemilikan_buku_buku_id_buku_fk` (`id_buku`),
-  KEY `kepemilikan_buku_users_id_user_fk` (`id_user`),
-  CONSTRAINT `kepemilikan_buku_buku_id_buku_fk` FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `kepemilikan_buku_users_id_user_fk` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `peminjaman_buku_id_buku_fk` (`id_buku`),
+  KEY `peminjaman_users_id_user_fk` (`id_user`),
+  CONSTRAINT `peminjaman_buku_id_buku_fk` FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `peminjaman_users_id_user_fk` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
